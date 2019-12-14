@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', function() { //waiting for DOM loaded - ждем, пока загрузится DOM дерево
+window.addEventListener('DOMContentLoaded', function () { //waiting for DOM loaded - ждем, пока загрузится DOM дерево
     'use strict';
 
     let tab = document.querySelectorAll('.info-header-tab'), // receiving our TABS from html page - получаем наши табы (кнопки) с html странички по классу info-header-tab
@@ -19,14 +19,14 @@ window.addEventListener('DOMContentLoaded', function() { //waiting for DOM loade
         }
     }
 
-    info.addEventListener('click', function(event) {
+    info.addEventListener('click', function (event) {
         let target = event.target;
         if (target && target.classList.contains('info-header-tab')) {
             for (let i = 0; i < tab.length; i++) {
-                    if (target == tab[i]) {
-                        hideTabContent(0);
-                        showTabContent(i);
-                        break;
+                if (target == tab[i]) {
+                    hideTabContent(0);
+                    showTabContent(i);
+                    break;
                 }
             }
         }
@@ -38,28 +38,28 @@ window.addEventListener('DOMContentLoaded', function() { //waiting for DOM loade
 
     function getTimeRemaining(endtime) {
         let t = Date.parse(endtime) - Date.parse(new Date()),
-            seconds = Math.floor((t/1000) % 60),
-            minutes = Math.floor((t/1000/60) % 60),
-            hours = Math.floor(t/(1000*60*60));
-            
-            return {
-                'total': t,
-                'seconds': seconds,
-                'minutes': minutes,
-                'hours': hours
-            };
+            seconds = Math.floor((t / 1000) % 60),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            hours = Math.floor(t / (1000 * 60 * 60));
+
+        return {
+            'total': t,
+            'seconds': seconds,
+            'minutes': minutes,
+            'hours': hours
+        };
     }
-    function setClock (id, endtime) {                   // receiving fields from html page using class selector / получаем поля, куда надо поместить время из html странички
+    function setClock(id, endtime) {                   // receiving fields from html page using class selector / получаем поля, куда надо поместить время из html странички
         let timer = document.getElementById(id),
             hours = timer.querySelector('.hours'),
             minutes = timer.querySelector('.minutes'),
             seconds = timer.querySelector('.seconds'),
-            timeInterval = setInterval(updateClock, 1000); 
+            timeInterval = setInterval(updateClock, 1000);
 
         function updateClock() {                        // updating fields on html page / обновляем данные таймера на html страничке
             let t = getTimeRemaining(endtime);
             function addZero(num) {
-                if(num <=9) {
+                if (num <= 9) {
                     return '0' + num;
                 } else return num;
             };
@@ -67,7 +67,7 @@ window.addEventListener('DOMContentLoaded', function() { //waiting for DOM loade
             hours.textContent = addZero(t.hours);
             minutes.textContent = addZero(t.minutes);
             seconds.textContent = addZero(t.seconds);
-           
+
             if (t.total <= 0) {                     // cancelling timer when deadline is over / останавливаем таймер при достижении заданной даты(дедлайна)
                 clearInterval(timeInterval);
                 hours.textContent = '00';
@@ -79,5 +79,36 @@ window.addEventListener('DOMContentLoaded', function() { //waiting for DOM loade
 
     }
     setClock('timer', deadline);
+
+
+    // modal
+
+    let more = document.querySelector('.more'),
+        overlay = document.querySelector('.overlay'),
+        close = document.querySelector('.popup-close');
+    
+    let modalOpener = function() {
+        overlay.style.display = 'block';
+        this.classList.add('more-splash');
+        document.body.style.overflow = 'hidden';
+    }
+
+    more.addEventListener('click', modalOpener);
+
+    close.addEventListener('click', function () {
+        overlay.style.display = 'none';
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    })
+
+    let descriptionBtn = document.querySelectorAll('.description-btn');
+    console.log(descriptionBtn);
+
+    for (let i = 0; i < descriptionBtn.length; i++) {
+
+        descriptionBtn[i].addEventListener('click', modalOpener);
+    }
+
+
 });
 
